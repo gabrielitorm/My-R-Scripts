@@ -1,9 +1,8 @@
 
 ### GeoBR - Gabrielito Menezes - 06/07/2022
-### Informações úteis:
+### InformaÃ§Ãµes Ãºteis:
 ### https://github.com/ipeaGIT/geobr
 ### https://www.rdocumentation.org/packages/geobr/versions/1.0
-### https://www.youtube.com/watch?v=BZ0NQrq3GV4&list=PLWinCsaFzrrHugN3c7CwmlFVl9kdaHQpe
 
 # Instalar o package:
 
@@ -17,7 +16,7 @@ library(magrittr)
 library(dplyr)
 library(ggplot2)
 
-# Acesando as informações do GeoBR:
+# Acesando as informaÃ§Ãµes do GeoBR:
 
 conj_dados <- list_geobr()
 
@@ -27,7 +26,7 @@ View(conj_dados)
 
 conj_dados %>% View()
 
-### Lendo as áeras geográficas:
+### Lendo as Ã¡eras geogrÃ¡ficas:
 
 ### Estados do BR
 
@@ -55,7 +54,7 @@ ggplot() + geom_sf(data = brasil) + theme_minimal() +
   labs(x="Longitude", y="Latitude")
 
 
- ### Mesorrgiões
+ ### MesorrgiÃµes
 
 meso_reg <- read_meso_region(code_meso = "all", year = 2018)
 
@@ -63,7 +62,7 @@ meso_reg <- read_meso_region(code_meso = "all", year = 2018)
 ggplot() + geom_sf(data = meso_reg) + theme_light()
 
 
-### Lendo todas as áeras geográficas de um estado 
+### Lendo todas as Ã¡eras geogrÃ¡ficas de um estado 
 
 
 municipios <- read_municipality(code_muni = 43, year = 2018) 
@@ -101,13 +100,13 @@ plot(rs)
 
 ggplot() + geom_sf(data = rs) + theme_bw()
 
-# Mesorregião
+# MesorregiÃ£o
 
 meso_rg <- read_meso_region(code_meso = 43)
 
 ggplot() + geom_sf(data = meso_rg) + theme_light()
 
-# Microrregião
+# MicrorregiÃ£o
 
 micro_rs <- read_micro_region(code_micro = 43)
 
@@ -116,7 +115,7 @@ ggplot() + geom_sf(data = micro_rs) + theme_light()
 micro_rs$name_micro
 
 
-### Áreas metropolitanas
+### Ãreas metropolitanas
 
 
 ma <- read_metro_area()
@@ -143,7 +142,7 @@ plot(rmPoa)
 ggplot() + geom_sf(data = rmPoa) + theme_light()
 
 ggplot() + geom_sf(data = rmPoa) + theme_minimal() +
-  ggtitle("Região Metropolitana de Porto Alegre") +
+  ggtitle("RegiÃ£o Metropolitana de Porto Alegre") +
   labs(caption = "Fonte: GeoBR")
 
 
@@ -154,12 +153,12 @@ names(rmPoa)
 glimpse(rmPoa)
 
 # Para mudar a cor do preenchimento usamos o argumento
-# fill = "cor". Podemos mudar a cor das linhas também,
+# fill = "cor". Podemos mudar a cor das linhas tambÃ©m,
 # basta usar o argumento color = "cor".
 
 ggplot() + geom_sf(data = rmPoa, fill = "white") + 
                      theme_minimal() +
-  ggtitle("Região Metropolitana de Porto Alegre") +
+  ggtitle("RegiÃ£o Metropolitana de Porto Alegre") +
   labs(caption = "Fonte: GeoBR")
 
 
@@ -250,19 +249,19 @@ ggplot(rmPoa.dados) +
 
 
 
-#### População Total em 2010
+#### PopulaÃ§Ã£o Total em 2010
 
-summary(rmPoa.dados$`População total 2010`)
+summary(rmPoa.dados$`PopulaÃ§Ã£o total 2010`)
 
 options(scipen=999)    # sem notacao cientifica
 
 ggplot(rmPoa.dados) +
-  geom_sf(aes(fill =(`População total 2010`))) +
+  geom_sf(aes(fill =(`PopulaÃ§Ã£o total 2010`))) +
   scale_fill_distiller(type = "seq",
                        palette = "Reds",
                        direction = 1) + 
   theme_minimal() +
-  labs(title = "População total 2010",
+  labs(title = "PopulaÃ§Ã£o total 2010",
        fill = NULL, caption = "Fonte: GRM") 
 
 #### IDHM em 2010
@@ -276,10 +275,10 @@ ggplot(rmPoa.dados) +
                        palette = "Blues",
                        direction = 1) + 
   theme_minimal() +
-  labs(title = "População total 2010",
+  labs(title = "PopulaÃ§Ã£o total 2010",
        fill = NULL, caption = "Fonte: GRM") 
 
 
-
+### The End
 
 
