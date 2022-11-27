@@ -1,0 +1,162 @@
+---
+title: 'Uma rápida introdução ao `geobr` (R)^[Versão preliminar, sugestões serão muito bem-vindas.]'
+#subtitle: Econometria Espacial
+author: 'Gabrielito Menezes^[Professor Adjunto da Universidade Federal de Pelotas (UFPel). E-mail: gabrielitorm@gmail.com]'
+date: '2022'
+output:
+  pdf_document:
+    number_sections: yes
+lang: pt-br
+---
+
+# Introdução ao `geobr`
+
+O pacote `geobr` fornece acesso rápido e fácil aos conjuntos de dados espaciais oficiais do Brasil. A sintaxe de todas as funções geobr opera em uma lógica simples que permite aos usuários baixar facilmente uma ampla variedade de conjuntos de dados com geometrias atualizadas e atributos harmonizados e projeções geográficas em várias regiões e anos. Esta material apresenta uma rápida introdução ao `geobr`[^1].
+
+[^1]: Essa introdução ao `geobr` foi realizada com a versão do `R` 4.0.5 e a versão do `RStudio` foi 2022.07.2+576 "Spotted Wakerobin" for Windows Mozilla/5.0 (Windows NT 10.0; Win64; x64).
+
+## Instalação do pacote `geobr`
+
+O **primeiro passo** é realizar a instação do pacote `geobr`.
+
+```{r, message=FALSE, warning=FALSE, eval = FALSE}
+
+install.packages("geobr")
+
+```
+
+# Próximos passos
+
+Vamos precisar carregar outros pacotes do `R`, para utilizarmos junto com o `geobr`.
+
+```{r, message=FALSE, warning=FALSE}
+
+library(geobr)
+library(sf)
+library(magrittr)
+library(dplyr)
+library(ggplot2)
+   
+```
+
+# Mapas com o `geobr`
+
+Vamos agora acessar as informações do pacote que estamos utilizando.
+
+```{r}
+
+conj_dados <- list_geobr()
+
+conj_dados
+
+```
+
+O pacote `geobr` tem as rotinas para o *download* dos mapas com divisões territoriais variadas. Vamos fazer um exemplo para o Brasil e outro para o Estado do Rio Grande do Sul (RS).
+
+## Mapa para os Estados do Brasil
+
+Para fazermos o *download* do mapa do Brasil por estados, vamos utilizar a função `rea_state()`, para a estrutura estadual do ano de 2018.
+
+```{r, message=FALSE, warning=FALSE, results = "hide"}
+
+brasil <- read_state(code_state = "all", year = 2018)
+
+```
+
+```{r, message=FALSE, warning=FALSE}
+ggplot() + geom_sf(data = brasil)
+```
+
+Podemos deixar o nosso mapar um pouco mais elegante! Para isso vamos usar o nosso querido amigo `ggplot2`, e vamos adicionar alguns temas.
+
+```{r, message=FALSE, warning=FALSE}
+ggplot() + geom_sf(data = brasil) + theme_minimal() +
+  ggtitle("Brasil") +  labs(caption = "Fonte: IBGE (2018)") +
+  labs(x="Longitude", y="Latitude")
+```
+
+Então, o que você achou?
+
+## Mapa para os municípios do Estado do RS
+
+Agora vamos fazer o *download* do mapa do RS. Para isso, vamos utilizar a função `rea_municipality()`, como está no `chunk` abaixo.
+
+```{r, , message=FALSE, warning=FALSE, results = "hide"}
+
+municipios <- read_municipality(code_muni = 43, year = 2018) 
+
+```
+
+De posse dos nossos dados, vamos fazer o plot do mapa do RS! O que você está observando?
+
+```{r,, message=FALSE, warning=FALSE}
+ggplot() + geom_sf(data=municipios) + theme_minimal()
+```
+
+Vamos ter que retirar a \underline{Lagoa Mirin} e a \underline{Lado dos Patos} do nosso shapefile[^2]! Temos duas opções! Uma é fazer um `subset` e a outra retirar os dados da nossa amostra.
+
+[^2]: O formato consiste em pelo menos quatro arquivos: .shp (feição), .dbf (tabela de atributos), .shx (ligação entre .shp e .dbf) e .prj (projeção).
+
+```{r, , message=FALSE, warning=FALSE}
+
+rs_01 <- municipios[3:499,]
+
+```
+
+Agora sim:
+
+```{r, message=FALSE, warning=FALSE}
+
+ggplot() + geom_sf(data = rs_01) + theme_minimal()
+
+```
+
+# Unindo os datasets
+
+Vamos agora juntar a base de dados com o shapefile do RS. Para isso vamos precisar do pacote `readxl`.
+
+```{r,message=FALSE, warning=FALSE}
+
+library(readxl)
+
+dados.rs <- read_excel("BaseDadosRS2.xlsx")
+
+
+```
+
+Podemos chegar se está tudo ok, observando os primeiros dados com a função `head()`. Vou deixar para você fazer isso quando estiver replicando esse script.
+
+```{r, message=FALSE, warning=FALSE, eval = FALSE}
+
+head(dados.rs)
+
+```
+
+Importate destacar que para fazer o *join*, precisamos ter a planilha com uma coluna com os códigos dos municípios igual a que está na coluna do shapefile `code_muni`. O bom de fazer o *join* usando o código dos municípios é que ocorre menos erros de digitação, quando comparado pelos nomes dos municípios. Então, vamos lá:
+
+```{r}
+
+rs.dados <- rs_01 %>% left_join(dados.rs, by ="code_muni")
+
+```
+
+# Fazendo o plot da renda *per capita* do RS
+
+Agora que já temos nossos dados unidos, vamos fazer o mapa da distribuição da renda *per capita* no RS no ano de 2010.
+
+```{r}
+ggplot(rs.dados) +
+  geom_sf(aes(fill =(`Renda per capita 2010`))) +
+    scale_fill_distiller(type = "seq",
+                       palette = "Reds",
+                       direction = 1) + 
+  theme_minimal() +
+  labs(title = "Renda per capita por cidade em 2010",
+       fill = NULL, caption = "Fonte: IBGE") 
+```
+
+Parabéns! Você já sabe fazer mapas fantásticos usando o `R`, e manipular bases de dados com o shapefile. É interessante explorar o *help* e o *vignettes* do `geobr`! Lá você vai encontrar mais informações importantes sobre o pacote `geobr`. 
+
+# Referências
+
+Rafael H. M. Pereira and Caio Nogueira Goncalves (2021). geobr: Download Official Spatial Data Sets of Brazil. R package version 1.6.1. <https://CRAN.R-project.org/package=geobr>
