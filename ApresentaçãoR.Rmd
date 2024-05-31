@@ -1,0 +1,74 @@
+---
+title: "Apresentação no R Markdown"
+author: "Gabrielito Menezes"
+date: '2024'
+institute: |
+  | PPGOM
+  | UFPel
+output:
+  beamer_presentation:
+    theme: default
+  slidy_presentation: default
+  ioslides_presentation: default
+lang: pt-br
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Introdução
+
+Essa é uma apresentação usando R Markdown.
+
+Ao clicar no botão **Knit**, será gerado um documento que inclui tanto o conteúdo quanto o resultado de qualquer parte do código do `R` incorporado na apresentação.
+
+# Listas não-ordenadas
+
+-   Primeiro item
+
+-   Segundo item
+
+# Listas ordenadas
+
+1.  Primeiro item
+
+2.  Segundo item
+
+3.  Terceiro item
+
+# Sub-listas
+
+1.  Primeiro item
+
+    -   Um sub-item
+
+    -   Outro sub-item
+
+2.  Segundo item
+
+3.  Terceiro item
+
+# Inserido equações matemáticas
+
+-   Mesmo procedimento do `LaTex`:
+
+    -   `$$Y = \beta_0 + \beta_1 x + \epsilon$$`
+
+$$Y = \beta_0 + \beta_1 x + \epsilon$$
+
+# Slide com o resultado em R
+
+```{r cars, echo = TRUE}
+summary(cars)
+```
+
+# Slide com gráfico
+
+```{r pressure}
+plot(pressure)
+```
+
+# Slide com Figura
+
+![Mapa](D:/Biblioteca/OneDrive/Documentos/fig6.png "Figura"){width="292"}
